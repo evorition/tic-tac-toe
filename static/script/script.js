@@ -28,7 +28,14 @@ const gameBoard = (() => {
     return null;
   }
 
-  return { getMoveCount, addMoveCount, getGameBoardItem, setGameBoardItem, decideWinner };
+  const reset = () => {
+    moveCount = 0;
+    for (let i = 0; i < 9; ++i) {
+      setGameBoardItem(i, "");
+    }
+  }
+
+  return { getMoveCount, addMoveCount, getGameBoardItem, setGameBoardItem, decideWinner, reset };
 })();
 
 const displayController = (() => {
@@ -41,7 +48,35 @@ const displayController = (() => {
     }
   }
 
+  const lockOrUnlockCell = (cell, lock = true) => {
+    if (lock) {
+      cell.classList.add("disabled");
+    } else {
+      cell.classList.remove("disabled");
+    }
+  }
+
+  const lockOrUnlockGameBoard = (lock = true) => {
+    for (const cell of gridChildren) {
+      lockOrUnlockCell(cell, lock);
+    }
+  }
+
+  const onGameRestart = () => {
+    restartButton.hidden = true;
+    gameBoard.reset();
+    displayGameBoard();
+    lockOrUnlockGameBoard(lock = false);
+    if (!playerOne.canMove()) {
+      playerOne.toggleMove();
+      playerTwo.toggleMove();
+    }
+  }
+
   const displayWinner = winner => {
+    lockOrUnlockGameBoard();
+    restartButton.hidden = false;
+
     if (winner === playerOne.getMark()) {
       console.log(`${playerOne.getName()} won!`);
     } else if (winner === playerTwo.getMark()) {
@@ -70,8 +105,9 @@ const displayController = (() => {
     gameBoard.setGameBoardItem(+event.target.dataset.index, mark);
     displayGameBoard();
 
-    event.target.classList.add("disabled");
+    lockOrUnlockCell(event.target);
 
+    // Maybe I should move this block out of `onCellClick`?
     gameBoard.addMoveCount();
     if (gameBoard.getMoveCount() >= 4) {
       const winner = gameBoard.decideWinner();
@@ -83,6 +119,9 @@ const displayController = (() => {
 
   const cells = document.querySelectorAll(".cell");
   cells.forEach(cell => cell.addEventListener("click", onCellClick));
+
+  const restartButton = document.querySelector("#restart-game");
+  restartButton.addEventListener("click", onGameRestart);
 
   return {};
 })();
