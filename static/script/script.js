@@ -39,6 +39,7 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
+  const message = document.querySelector("#message");
   const grid = document.querySelector("#game-board");
   const gridChildren = grid.children;
 
@@ -67,6 +68,7 @@ const displayController = (() => {
     gameBoard.reset();
     displayGameBoard();
     lockOrUnlockGameBoard(lock = false);
+    message.textContent = `${playerOne.getName()} turn`;
     if (!playerOne.canMove()) {
       playerOne.toggleMove();
       playerTwo.toggleMove();
@@ -78,11 +80,11 @@ const displayController = (() => {
     restartButton.hidden = false;
 
     if (winner === playerOne.getMark()) {
-      console.log(`${playerOne.getName()} won!`);
+      message.textContent = `${playerOne.getName()} won!`;
     } else if (winner === playerTwo.getMark()) {
-      console.log(`${playerTwo.getName()} won!`);
+      message.textContent = `${playerTwo.getName()} won!`;
     } else {
-      console.log(`It's a tie!`);
+      message.textContent = "It's a tie!";
     }
   }
 
@@ -93,10 +95,12 @@ const displayController = (() => {
 
     let mark;
     if (playerOne.canMove()) {
+      message.textContent = `${playerTwo.getName()} turn`;
       mark = playerOne.getMark();
       playerOne.toggleMove();
       playerTwo.toggleMove();
     } else if (playerTwo.canMove()) {
+      message.textContent = `${playerOne.getName()} turn`;
       mark = playerTwo.getMark();
       playerTwo.toggleMove();
       playerOne.toggleMove();
@@ -107,7 +111,6 @@ const displayController = (() => {
 
     lockOrUnlockCell(event.target);
 
-    // Maybe I should move this block out of `onCellClick`?
     gameBoard.addMoveCount();
     if (gameBoard.getMoveCount() >= 4) {
       const winner = gameBoard.decideWinner();
@@ -117,13 +120,30 @@ const displayController = (() => {
     }
   }
 
+  const askPlayersName = () => {
+    let playerOneName;
+    let playerTwoName;
+
+    do {
+      playerOneName = prompt("Enter X's player name");
+    } while (playerOneName === "" || playerOneName === null);
+
+    do {
+      playerTwoName = prompt("Enter O's player name");
+    } while (playerTwoName === "" || playerTwoName === null);
+
+    message.textContent = `${playerOneName} turn`;
+
+    return [playerOneName, playerTwoName];
+  }
+
   const cells = document.querySelectorAll(".cell");
   cells.forEach(cell => cell.addEventListener("click", onCellClick));
 
   const restartButton = document.querySelector("#restart-game");
   restartButton.addEventListener("click", onGameRestart);
 
-  return {};
+  return { askPlayersName };
 })();
 
 const player = (name, move, mark) => {
@@ -134,5 +154,7 @@ const player = (name, move, mark) => {
   return { getName, canMove, toggleMove, getMark };
 }
 
-const playerOne = player("Maxim", true, "X");
-const playerTwo = player("Alexander", false, "O");
+const [playerOneName, playerTwoName] = displayController.askPlayersName();
+
+const playerOne = player(playerOneName, true, "X");
+const playerTwo = player(playerTwoName, false, "O");
