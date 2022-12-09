@@ -2,6 +2,8 @@
 
 This is a solution to the tic-tac-toe [project](https://www.theodinproject.com/lessons/node-path-javascript-tic-tac-toe) from The Odin Project.
 
+Try it live [here](https://evorition.github.io/tic-tac-toe/)
+
 ## TODO
 - [x] Ask for player's name
 - [x] Show who won not in console but in HTML
