@@ -5,5 +5,5 @@ This is a solution to the tic-tac-toe [project](https://www.theodinproject.com/l
 ## TODO
 - [x] Ask for player's name
 - [x] Show who won not in console but in HTML
-- [ ] Make it look less ugly
+- [x] Make it look less ugly
 - [ ] Add capability to play against computer

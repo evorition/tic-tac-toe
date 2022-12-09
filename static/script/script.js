@@ -64,11 +64,17 @@ const displayController = (() => {
   }
 
   const onGameRestart = () => {
-    restartButton.hidden = true;
+    restartButton.disabled = true;
     gameBoard.reset();
     displayGameBoard();
     lockOrUnlockGameBoard(lock = false);
-    message.textContent = `${playerOne.getName()} turn`;
+    message.textContent = `${playerOne.getName()}'s turn`;
+
+    const classes = ["x", "o"];
+    for (const child of gridChildren) {
+      child.classList.remove(...classes);
+    }
+
     if (!playerOne.canMove()) {
       playerOne.toggleMove();
       playerTwo.toggleMove();
@@ -77,7 +83,7 @@ const displayController = (() => {
 
   const displayWinner = winner => {
     lockOrUnlockGameBoard();
-    restartButton.hidden = false;
+    restartButton.disabled = false;
 
     if (winner === playerOne.getMark()) {
       message.textContent = `${playerOne.getName()} won!`;
@@ -95,21 +101,24 @@ const displayController = (() => {
 
     let mark;
     if (playerOne.canMove()) {
-      message.textContent = `${playerTwo.getName()} turn`;
       mark = playerOne.getMark();
+      event.target.classList.add("x");
+      message.textContent = `${playerTwo.getName()}'s turn`;
+
       playerOne.toggleMove();
       playerTwo.toggleMove();
     } else if (playerTwo.canMove()) {
-      message.textContent = `${playerOne.getName()} turn`;
       mark = playerTwo.getMark();
+      event.target.classList.add("o");
+      message.textContent = `${playerOne.getName()}'s turn`;
+
       playerTwo.toggleMove();
       playerOne.toggleMove();
     }
 
     gameBoard.setGameBoardItem(+event.target.dataset.index, mark);
-    displayGameBoard();
-
     lockOrUnlockCell(event.target);
+    displayGameBoard();
 
     gameBoard.addMoveCount();
     if (gameBoard.getMoveCount() >= 4) {
@@ -125,14 +134,14 @@ const displayController = (() => {
     let playerTwoName;
 
     do {
-      playerOneName = prompt("Enter X's player name");
+      playerOneName = prompt("Enter X player name");
     } while (playerOneName === "" || playerOneName === null);
 
     do {
-      playerTwoName = prompt("Enter O's player name");
+      playerTwoName = prompt("Enter O player name");
     } while (playerTwoName === "" || playerTwoName === null);
 
-    message.textContent = `${playerOneName} turn`;
+    message.textContent = `${playerOneName}'s turn`;
 
     return [playerOneName, playerTwoName];
   }

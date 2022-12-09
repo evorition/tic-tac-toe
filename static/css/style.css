@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 * {
+  font-family: "Roboto";
   margin: 0;
   padding: 0;
 }
@@ -10,15 +13,25 @@ body {
 #container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   height: inherit;
 }
 
+#message {
+  font-size: 3rem;
+}
+
 #game-board {
-  width: 600px;
+  width: 590px;
   display: grid;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  gap: 1px;
+  background-color: rgb(85, 85, 85);
+}
+
+#game-board>* {
+  background-color: rgb(255, 255, 255);
 }
 
 .cell {
@@ -27,21 +40,20 @@ body {
   align-items: center;
   justify-content: center;
   aspect-ratio: 1;
-  border: 1px solid rgb(0, 0, 0);
 }
 
-.cell:nth-child(-n + 3) {
-  border-top: none;
+.x {
+  color: rgb(31, 31, 143);
 }
 
-.cell:nth-child(3n) {
-  border-right: none;
+.o {
+  color: rgb(150, 28, 28);
 }
 
-.cell:nth-child(3n - 2) {
-  border-left: none;
-}
-
-.cell:nth-child(n + 7) {
-  border-bottom: none;
+#restart-game {
+  border-radius: 4px;
+  border: none;
+  background-color: rgb(168, 218, 220);
+  font-size: 1.2rem;
+  padding: 16px;
 }
