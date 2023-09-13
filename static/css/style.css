@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 * {
   font-family: "Roboto";
@@ -30,7 +30,7 @@ body {
   background-color: rgb(85, 85, 85);
 }
 
-#game-board>* {
+#game-board > * {
   background-color: rgb(255, 255, 255);
 }
 
@@ -56,4 +56,17 @@ body {
   background-color: rgb(168, 218, 220);
   font-size: 1.2rem;
   padding: 16px;
+}
+
+#player-cards {
+  width: 20%;
+  display: flex;
+  justify-content: space-between;
+  gap: 2px;
+}
+
+.card {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }

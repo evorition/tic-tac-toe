@@ -54,6 +54,7 @@ const gameBoard = (() => {
 
 (() => {
   const message = document.querySelector("#message");
+  const scores = document.querySelectorAll(".score");
   const grid = document.querySelector("#game-board");
   const gridChildren = grid.children;
 
@@ -78,7 +79,6 @@ const gameBoard = (() => {
   };
 
   const onGameRestart = () => {
-    restartButton.disabled = true;
     gameBoard.reset();
     displayGameBoard();
     lockOrUnlockGameBoard((lock = false));
@@ -100,8 +100,10 @@ const gameBoard = (() => {
     restartButton.disabled = false;
 
     if (winner === playerOne.getMark()) {
+      scores[0].textContent = playerOne.updateScore();
       message.textContent = `${playerOne.getMark()} won!`;
     } else if (winner === playerTwo.getMark()) {
+      scores[1].textContent = playerTwo.updateScore();
       message.textContent = `${playerTwo.getMark()} won!`;
     } else {
       message.textContent = "It's a tie!";
@@ -117,14 +119,14 @@ const gameBoard = (() => {
     if (playerOne.canMove()) {
       mark = playerOne.getMark();
       event.target.classList.add("x");
-      message.textContent = `${mark} turn`;
+      message.textContent = `${playerTwo.getMark()} turn`;
 
       playerOne.toggleMove();
       playerTwo.toggleMove();
     } else if (playerTwo.canMove()) {
       mark = playerTwo.getMark();
       event.target.classList.add("o");
-      message.textContent = `${mark} turn`;
+      message.textContent = `${playerOne.getMark()} turn`;
 
       playerTwo.toggleMove();
       playerOne.toggleMove();
@@ -151,10 +153,12 @@ const gameBoard = (() => {
 })();
 
 const player = (move, mark) => {
+  let score = 0;
+  const updateScore = () => ++score;
   const canMove = () => move;
   const getMark = () => mark;
   const toggleMove = () => (move = !move);
-  return { canMove, toggleMove, getMark };
+  return { updateScore, canMove, toggleMove, getMark };
 };
 
 const playerOne = player(true, "X");
