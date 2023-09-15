@@ -63,21 +63,32 @@ body {
   background-color: rgb(160, 210, 220);
 }
 
-#player-cards {
+#players-cards {
   width: 20%;
   display: flex;
   justify-content: space-between;
   gap: 8px;
 }
 
-.card {
+.player-card {
   padding: 4px;
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
-.turn {
+.player-turn {
   border-bottom: 2px solid rgb(168, 218, 220);
   border-radius: 4px;
+}
+
+.win-animation {
+  animation: colorChange 1s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes colorChange {
+  to {
+    color: rgb(168, 218, 220);
+  }
 }

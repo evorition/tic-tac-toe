@@ -30,10 +30,10 @@ const gameBoard = (() => {
         itemA === getGameBoardItem(b) &&
         itemA === getGameBoardItem(c)
       ) {
-        return getGameBoardItem(a);
+        return { mark: itemA, winningPositions: winPositionsArr[i] };
       }
     }
-    return null;
+    return { mark: null, winningPositions: null };
   };
 
   const reset = () => {
@@ -66,8 +66,8 @@ const playerTwo = player(false, "O");
 (() => {
   const BOARD_SIZE = 9;
   const message = document.querySelector("#message");
-  const players = document.querySelectorAll(".card");
-  const scores = document.querySelectorAll(".score");
+  const players = document.querySelectorAll(".player-card");
+  const scores = document.querySelectorAll(".player-score");
   const grid = document.querySelector("#game-board");
   const gridChildren = grid.children;
 
@@ -100,11 +100,11 @@ const playerTwo = player(false, "O");
 
   const updatePlayerCard = () => {
     if (playerOne.canMove()) {
-      players[0].classList.toggle("turn");
-      players[1].classList.toggle("turn");
+      players[0].classList.add("player-turn");
+      players[1].classList.remove("player-turn");
     } else {
-      players[0].classList.toggle("turn");
-      players[1].classList.toggle("turn");
+      players[0].classList.remove("player-turn");
+      players[1].classList.add("player-turn");
     }
   };
 
@@ -120,7 +120,7 @@ const playerTwo = player(false, "O");
 
     for (const cell of gridChildren) {
       cell.textContent = "";
-      cell.classList.remove("x", "o", "disabled");
+      cell.classList.remove("x", "o", "disabled", "win-animation");
     }
 
     displayGameBoard();
@@ -131,18 +131,25 @@ const playerTwo = player(false, "O");
     displayPlayerTurn();
   };
 
-  const displayWinner = (winner) => {
+  const displayWinner = ({ mark, winningPositions }) => {
     lockGameBoard();
 
-    if (winner === playerOne.getMark()) {
-      scores[0].textContent = playerOne.updateScore();
-      message.textContent = `${playerOne.getMark()} won!`;
-    } else if (winner === playerTwo.getMark()) {
-      scores[1].textContent = playerTwo.updateScore();
-      message.textContent = `${playerTwo.getMark()} won!`;
-    } else {
+    if (!mark) {
       message.textContent = "It's a tie!";
+      return;
     }
+
+    message.textContent = `${mark} won!`;
+
+    if (mark === playerOne.getMark()) {
+      scores[0].textContent = playerOne.updateScore();
+    } else {
+      scores[1].textContent = playerTwo.updateScore();
+    }
+
+    winningPositions.forEach((index) => {
+      gridChildren[index].classList.add("win-animation");
+    });
   };
 
   const onCellClick = (event) => {
@@ -166,7 +173,7 @@ const playerTwo = player(false, "O");
     gameBoard.addMoveCount();
     if (gameBoard.getMoveCount() >= 4) {
       const winner = gameBoard.decideWinner();
-      if (winner !== null || gameBoard.getMoveCount() === 9) {
+      if (winner.mark !== null || gameBoard.getMoveCount() === 9) {
         displayWinner(winner);
       }
     }
