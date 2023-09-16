@@ -1,4 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+:root {
+  --main-color: rgb(168, 218, 220);
+  --focus-color: rgb(160, 210, 220);
+  --game-board-color: rgb(85, 85, 85);
+  --x-color: rgb(70, 70, 145);
+  --y-color: rgb(180, 78, 78);
+  --border-radius: 4px;
+}
 
 * {
   font-family: "Roboto";
@@ -8,14 +15,31 @@
 
 body {
   height: 100vh;
-}
-
-#container {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
-  height: inherit;
+  gap: 2.5rem;
+}
+
+#players-cards,
+.player-card {
+  display: flex;
+  justify-content: space-between;
+}
+
+#players-cards {
+  width: 20%;
+  gap: 8px;
+}
+
+.player-card {
+  padding: 4px;
+  width: 100%;
+}
+
+.player-turn {
+  border-bottom: 2px solid var(--main-color);
+  border-radius: var(--border-radius);
 }
 
 #message {
@@ -23,11 +47,12 @@ body {
 }
 
 #game-board {
-  width: 590px;
   display: grid;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
   gap: 1px;
-  background-color: rgb(85, 85, 85);
+  max-width: 40rem;
+  width: 80%;
+  background-color: var(--game-board-color);
 }
 
 #game-board > * {
@@ -43,43 +68,11 @@ body {
 }
 
 .x {
-  color: rgb(31, 31, 143);
+  color: var(--x-color);
 }
 
 .o {
-  color: rgb(150, 28, 28);
-}
-
-#restart-game {
-  cursor: pointer;
-  border-radius: 4px;
-  border: none;
-  background-color: rgb(168, 218, 220);
-  font-size: 1.2rem;
-  padding: 16px;
-}
-
-#restart-game:hover {
-  background-color: rgb(160, 210, 220);
-}
-
-#players-cards {
-  width: 20%;
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.player-card {
-  padding: 4px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.player-turn {
-  border-bottom: 2px solid rgb(168, 218, 220);
-  border-radius: 4px;
+  color: var(--y-color);
 }
 
 .win-animation {
@@ -89,6 +82,20 @@ body {
 
 @keyframes colorChange {
   to {
-    color: rgb(168, 218, 220);
+    color: var(--main-color);
   }
+}
+
+#restart-game {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--main-color);
+  font-size: 1.2rem;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+#restart-game:hover {
+  background-color: var(--focus-color);
 }
